@@ -349,15 +349,17 @@
       ctx.globalAlpha = 0.35 * A;
       ctx.drawImage(glow, s.x - 9, s.y - 9, 18, 18);
     });
+    // Nodes at 50% opacity so they sit back from the traces.
+    var nodeColor = 'rgba(255,255,255,' + (0.5 * A) + ')';
     c.nodes.forEach(function (n) {
       if (S < n.d) return;
       var gsz = n.r * 9;
-      ctx.globalAlpha = 0.45 * A;
+      ctx.globalAlpha = 0.3 * A;
       ctx.drawImage(glow, n.x - gsz / 2, n.y - gsz / 2, gsz, gsz);
       ctx.globalAlpha = 1;
       drawNodeShape(ctx, n);
-      if (n.hollow) { ctx.lineWidth = 1.6; ctx.strokeStyle = core; ctx.stroke(); }
-      else { ctx.fillStyle = core; ctx.fill(); }
+      if (n.hollow) { ctx.lineWidth = 1.6; ctx.strokeStyle = nodeColor; ctx.stroke(); }
+      else { ctx.fillStyle = nodeColor; ctx.fill(); }
     });
 
     // Bright spark at the front of a travelling pulse.
