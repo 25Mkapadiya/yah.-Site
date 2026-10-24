@@ -18,7 +18,7 @@ build step and is hosted on GitHub Pages. Sign-ups go to a Supabase table.
 
 ## 1. Set up Supabase (once)
 
-1. Open your Supabase project (the site is set up for project `vsfjoqvjixvuutqczxdr`).
+1. Open your Supabase project (the site is set up for project `oobwaxqijzkiwsgyzhbe`).
    If it says **Paused**, click **Restore project** and wait a couple of minutes.
 2. Go to **SQL Editor → New query**, paste everything in `supabase/yah_signups.sql`, and click **Run**.
    This creates a **new** table called `yah_signups`. No existing table is changed.
