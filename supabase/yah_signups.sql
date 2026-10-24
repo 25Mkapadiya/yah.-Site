@@ -4,11 +4,7 @@
 create table if not exists public.yah_signups (
   id          bigint generated always as identity primary key,
   created_at  timestamptz not null default now(),
-  name        text not null check (char_length(name) between 1 and 120),
   email       text not null check (char_length(email) <= 254 and email ~* '^[^\s@]+@[^\s@]+\.[^\s@]+$'),
-  school      text check (char_length(school) <= 120),
-  grad_year   smallint check (grad_year between 1990 and 2100),
-  interests   text[] not null default '{}' check (cardinality(interests) <= 10),
   source      text check (char_length(source) <= 255)
 );
 
@@ -30,5 +26,4 @@ create policy "Public can sign up"
   with check (true);
 
 revoke all on public.yah_signups from anon, authenticated;
-grant insert (name, email, school, grad_year, interests, source)
-  on public.yah_signups to anon;
+grant insert (email, source) on public.yah_signups to anon;
