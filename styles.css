@@ -32,7 +32,8 @@ h1 { margin: 0; }
 
 .logo {
   display: block;
-  width: 260px;
+  overflow: visible;
+  width: 266px;
   max-width: 70vw;
   height: auto;
 }
