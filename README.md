@@ -9,6 +9,7 @@ build step and is hosted on GitHub Pages. Sign-ups go to a Supabase table.
 | `index.html` | The page |
 | `styles.css` | Styling, using the logo's Yale blue `#00356B` with Libre Caslon Text and Inter |
 | `app.js` | Sign-up form logic: checks the fields, then posts to Supabase |
+| `circuits.js` | Animated circuit background; the logo lights up and dims with its circuit |
 | `config.js` | Supabase URL and publishable key |
 | `supabase/yah_signups.sql` | Creates the new `yah_signups` table and its security rules |
 | `favicon.svg` | Browser tab icon |
