@@ -200,8 +200,8 @@
         }
       }
 
-      // Keep only a few plain circuits; most should branch like the logo.
-      if (branches < 3 && Math.random() > 0.12) { rollback(placed); continue; }
+      // Only keep circuits that branch like the logo; no plain lines.
+      if (branches < 3) { rollback(placed); continue; }
       return circ;
     }
     return null;
