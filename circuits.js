@@ -89,73 +89,119 @@
     circ.total = Math.max(circ.total, d);
   }
 
-  // Try to lay a branch: k diagonal steps then m steps parallel to the trunk.
-  function tryBranch(circ, id, c, r, dir, side, k, m, w, dist) {
-    var dd = [dir[0] - side * dir[1], dir[1] + side * dir[0]]; // dir rotated 45°
-    var cells = [[c, r]], cc = c, rr = r, i;
-    for (i = 0; i < k; i++) {
-      if (diag.has(diagKey(cc, rr, dd[0], dd[1]))) return null;
-      cc += dd[0]; rr += dd[1];
-      if (!free(cc, rr, id)) return null;
-      cells.push([cc, rr]);
+  function rot45(d, side) { return [d[0] - side * d[1], d[1] + side * d[0]]; }
+  function rot90(d, side) { return [-side * d[1], side * d[0]]; }
+
+  // Lay a path from (c, r) as a list of moves [dc, dr, steps]. Returns the
+  // cells and each cell's direction, or null if anything is in the way.
+  // Everything it occupies is recorded in `placed` so it can be rolled back.
+  function layPath(id, c, r, moves, placed) {
+    var cells = [[c, r]], dirs = [null], seen = {}, diags = [], cc = c, rr = r;
+    for (var i = 0; i < moves.length; i++) {
+      var dc = moves[i][0], dr = moves[i][1];
+      for (var j = 0; j < moves[i][2]; j++) {
+        if (dc && dr) {
+          var dk = diagKey(cc, rr, dc, dr);
+          if (diag.has(dk)) return null;
+          diags.push(dk);
+        }
+        cc += dc; rr += dr;
+        var k = key(cc, rr);
+        if (seen[k] || !free(cc, rr, id)) return null;
+        seen[k] = true;
+        cells.push([cc, rr]);
+        dirs.push([dc, dr]);
+      }
     }
-    for (i = 0; i < m; i++) {
-      cc += dir[0]; rr += dir[1];
-      if (!free(cc, rr, id)) return null;
-      cells.push([cc, rr]);
+    for (i = 1; i < cells.length; i++) {
+      var ck = key(cells[i][0], cells[i][1]);
+      occ.set(ck, id);
+      placed.cells.push(ck);
     }
-    // Commit.
-    var pts = [];
-    for (i = 0; i < cells.length; i++) {
-      pts.push({ x: px(cells[i][0]), y: py(cells[i][1]) });
-      if (i) occ.set(key(cells[i][0], cells[i][1]), id);
-      if (i && i <= k) diag.add(diagKey(cells[i - 1][0], cells[i - 1][1], dd[0], dd[1]));
-    }
-    var pl = polyline(pts, dist, w);
+    diags.forEach(function (dk) { diag.add(dk); placed.diags.push(dk); });
+    return { cells: cells, dirs: dirs };
+  }
+
+  function cellPoints(cells) {
+    return cells.map(function (c) { return { x: px(c[0]), y: py(c[1]) }; });
+  }
+
+  function sameDir(a, b) { return a && a[0] === b[0] && a[1] === b[1]; }
+
+  // Branch shapes, all ending parallel to the trunk like the logo's network:
+  // fan (angle off, run on), step (out sideways, angle, run on) and long angle.
+  function branchMoves(dir, side, small) {
+    var dg = rot45(dir, side), pp = rot90(dir, side), t = Math.random();
+    if (small) return [[dg[0], dg[1], randInt(1, 2)], [dir[0], dir[1], randInt(1, 3)]];
+    if (t < 0.5) return [[dg[0], dg[1], randInt(1, 3)], [dir[0], dir[1], randInt(2, 6)]];
+    if (t < 0.8) return [[pp[0], pp[1], randInt(1, 3)], [dg[0], dg[1], 1], [dir[0], dir[1], randInt(2, 5)]];
+    return [[dg[0], dg[1], randInt(3, 5)], [dir[0], dir[1], randInt(1, 4)]];
+  }
+
+  function addBranch(circ, id, from, dist, dir, side, small, w, placed) {
+    var path = layPath(id, from[0], from[1], branchMoves(dir, side, small), placed);
+    if (!path) return null;
+    var pl = polyline(cellPoints(path.cells), dist, w);
     circ.lines.push(pl);
-    circ.sparks.push({ x: pts[0].x, y: pts[0].y, d: dist });
+    circ.sparks.push({ x: pl.pts[0].x, y: pl.pts[0].y, d: dist });
     var end = pl.pts[pl.pts.length - 1];
     addNode(circ, end.x, end.y, end.d, w > 1.3 ? 3 : 2.4, Math.random() < 0.35);
-    return { cells: cells, pl: pl, dd: dd };
+    return { path: path, pl: pl };
+  }
+
+  function rollback(placed) {
+    placed.cells.forEach(function (k) { occ.delete(k); });
+    placed.diags.forEach(function (k) { diag.delete(k); });
   }
 
   function makeGridCircuit(id) {
     var DIRS = [[1, 0], [-1, 0], [1, 0], [-1, 0], [0, 1], [0, -1]];
-    for (var attempt = 0; attempt < 6; attempt++) {
+    for (var attempt = 0; attempt < 10; attempt++) {
       var c0 = randInt(-1, cols), r0 = randInt(-1, rows);
       if (!free(c0, r0, id)) continue;
       var dir = DIRS[randInt(0, DIRS.length - 1)];
-      var len = randInt(5, 13), cells = [[c0, r0]];
-      for (var i = 1; i <= len; i++) {
-        var c = c0 + dir[0] * i, r = r0 + dir[1] * i;
-        if (!free(c, r, id)) break;
-        cells.push([c, r]);
-      }
-      if (cells.length < 5) continue;
+      var placed = { cells: [key(c0, r0)], diags: [] };
+      occ.set(key(c0, r0), id);
 
-      var circ = newCircuit(), pts = [];
-      for (i = 0; i < cells.length; i++) {
-        occ.set(key(cells[i][0], cells[i][1]), id);
-        pts.push({ x: px(cells[i][0]), y: py(cells[i][1]) });
-      }
-      var trunk = polyline(pts, 0, 1.8);
+      // Trunk: straight, or bending 45° partway and carrying on.
+      var moves = Math.random() < 0.4
+        ? (function () {
+            var dg = rot45(dir, Math.random() < 0.5 ? -1 : 1);
+            return [[dir[0], dir[1], randInt(3, 6)], [dg[0], dg[1], randInt(1, 3)], [dir[0], dir[1], randInt(3, 7)]];
+          })()
+        : [[dir[0], dir[1], randInt(6, 13)]];
+      var trunkPath = layPath(id, c0, r0, moves, placed);
+      if (!trunkPath) { rollback(placed); continue; }
+
+      var circ = newCircuit();
+      var trunk = polyline(cellPoints(trunkPath.cells), 0, 1.8);
       circ.lines.push(trunk);
-      addNode(circ, pts[0].x, pts[0].y, 0, 4, false);
+      addNode(circ, trunk.pts[0].x, trunk.pts[0].y, 0, 4, false);
       var tEnd = trunk.pts[trunk.pts.length - 1];
       addNode(circ, tEnd.x, tEnd.y, tEnd.d, 3.4, true);
 
-      // Branches fan out from the trunk like the logo's network.
-      for (i = 1; i < cells.length - 2; i++) {
-        if (Math.random() > 0.6) continue;
-        var side = Math.random() < 0.5 ? -1 : 1;
-        var b = tryBranch(circ, id, cells[i][0], cells[i][1], dir, side,
-          randInt(1, 3), randInt(2, 6), 1.4, trunk.pts[i].d);
-        if (b && Math.random() < 0.5) {
-          var j = b.cells.length - 1 - randInt(1, Math.max(1, b.cells.length - 3));
-          if (j > 0) tryBranch(circ, id, b.cells[j][0], b.cells[j][1], dir, side,
-            randInt(1, 2), randInt(1, 3), 1, b.pl.pts[j].d);
+      // Branches fan out from the straight parts of the trunk, sometimes on
+      // both sides, and often split again.
+      var branches = 0, cells = trunkPath.cells;
+      for (var i = 1; i < cells.length - 2; i++) {
+        if (!sameDir(trunkPath.dirs[i], dir) || !sameDir(trunkPath.dirs[i + 1], dir)) continue;
+        if (Math.random() > 0.7) continue;
+        var sides = Math.random() < 0.25 ? [-1, 1] : [Math.random() < 0.5 ? -1 : 1];
+        for (var si = 0; si < sides.length; si++) {
+          var b = addBranch(circ, id, cells[i], trunk.pts[i].d, dir, sides[si], false, 1.4, placed);
+          if (!b) continue;
+          branches++;
+          var bc = b.path.cells;
+          for (var j = 1; j < bc.length - 1; j++) {
+            if (!sameDir(b.path.dirs[j + 1], dir) || Math.random() > 0.35) continue;
+            if (addBranch(circ, id, bc[j], b.pl.pts[j].d, dir, sides[si], true, 1, placed)) branches++;
+            break;
+          }
         }
       }
+
+      // Keep only a few plain circuits; most should branch like the logo.
+      if (branches < 3 && Math.random() > 0.12) { rollback(placed); continue; }
       return circ;
     }
     return null;
@@ -412,8 +458,8 @@
     logoCircuit = makeLogoCircuit();
     if (logoCircuit) circuits.push(logoCircuit);
 
-    var target = Math.round((W * H) / (G * G * 22)), tries = 0;
-    while (circuits.length < target && tries++ < target * 6) {
+    var target = Math.round((W * H) / (G * G * 30)), tries = 0;
+    while (circuits.length < target && tries++ < target * 12) {
       var c = makeGridCircuit('c' + tries);
       if (c) circuits.push(c);
     }
