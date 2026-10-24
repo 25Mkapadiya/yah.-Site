@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <rect width="300" height="300" rx="48" fill="#00356B"/>
+  <g transform="translate(150 150) scale(0.821) translate(-147.3 -151.9)">
+    <text x="152" y="171" text-anchor="end" font-family="'Libre Caslon Text', Baskerville, 'Times New Roman', serif" font-size="80" font-weight="700" letter-spacing="-1.5" fill="#FFFFFF">yah</text>
+    <g fill="none" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="172,162 273,162" stroke-width="4"/>
+      <polyline points="184,162 214,132 259,132" stroke-width="3"/>
+      <polyline points="192,162 222,192 263,192" stroke-width="3"/>
+      <polyline points="204,142 204,108 216,96 247,96" stroke-width="2.5"/>
+      <polyline points="230,132 250,112 274,112" stroke-width="2.5"/>
+      <polyline points="240,192 258,210 281,210" stroke-width="2.5"/>
+    </g>
+    <circle cx="163" cy="162" r="9" fill="#FFFFFF"/>
+  </g>
+</svg>

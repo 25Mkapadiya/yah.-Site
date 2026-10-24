@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>yah. | Yale Agentic Hackathons</title>
+  <meta name="description" content="Yale Agentic Hackathons (yah.) brings Yale undergraduates together to design, build and demo AI agents. Our first hackathon is coming Spring 2027. Join the list.">
+  <meta name="theme-color" content="#00356B">
+  <meta property="og:title" content="yah. | Yale Agentic Hackathons">
+  <meta property="og:description" content="Our first hackathon for building AI agents is coming Spring 2027. Sign up to save your spot and get updates.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <svg class="network" aria-hidden="true" viewBox="0 0 1200 800" preserveAspectRatio="xMaxYMid slice">
+    <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="520,420 1240,420" stroke-width="3"></polyline>
+      <polyline points="600,420 760,260 1240,260" stroke-width="2"></polyline>
+      <polyline points="650,420 810,580 1240,580" stroke-width="2"></polyline>
+      <polyline points="700,310 700,140 780,60 1240,60" stroke-width="1.5"></polyline>
+      <polyline points="880,260 980,160 1240,160" stroke-width="1.5"></polyline>
+      <polyline points="930,580 1030,680 1240,680" stroke-width="1.5"></polyline>
+      <polyline points="840,420 920,340 1060,340" stroke-width="1"></polyline>
+      <polyline points="840,420 920,500 1060,500" stroke-width="1"></polyline>
+    </g>
+    <g fill="currentColor">
+      <circle cx="1060" cy="340" r="5"></circle>
+      <circle cx="1060" cy="500" r="5"></circle>
+      <circle cx="980" cy="160" r="4"></circle>
+      <circle cx="1030" cy="680" r="4"></circle>
+      <circle cx="760" cy="260" r="4"></circle>
+      <circle cx="810" cy="580" r="4"></circle>
+    </g>
+  </svg>
+
+  <header class="site-header">
+    <a class="wordmark" href="./" aria-label="yah. home">
+      <svg viewBox="38 88 244 124" width="142" height="72" role="img" aria-label="yah. logo">
+        <g transform="translate(150 150) scale(0.821) translate(-147.3 -151.9)">
+          <text x="152" y="171" text-anchor="end" font-family="'Libre Caslon Text', Baskerville, 'Times New Roman', serif" font-size="80" font-weight="700" letter-spacing="-1.5" fill="#FFFFFF">yah</text>
+          <g fill="none" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="172,162 273,162" stroke-width="4"></polyline>
+            <polyline points="184,162 214,132 259,132" stroke-width="3"></polyline>
+            <polyline points="192,162 222,192 263,192" stroke-width="3"></polyline>
+            <polyline points="204,142 204,108 216,96 247,96" stroke-width="2.5"></polyline>
+            <polyline points="230,132 250,112 274,112" stroke-width="2.5"></polyline>
+            <polyline points="240,192 258,210 281,210" stroke-width="2.5"></polyline>
+            <polyline points="218,162 232,148 248,148" stroke-width="1.75"></polyline>
+            <polyline points="218,162 232,176 248,176" stroke-width="1.75"></polyline>
+          </g>
+          <circle cx="163" cy="162" r="9" fill="#FFFFFF"></circle>
+          <g stroke="#FFFFFF">
+            <circle cx="279" cy="162" r="6" fill="#00356B" stroke-width="3"></circle>
+            <circle cx="264" cy="132" r="5" fill="#FFFFFF" stroke-width="0"></circle>
+            <circle cx="268" cy="192" r="5" fill="#FFFFFF" stroke-width="0"></circle>
+            <circle cx="252" cy="96" r="5" fill="#00356B" stroke-width="2.5"></circle>
+            <circle cx="278" cy="112" r="4" fill="#FFFFFF" stroke-width="0"></circle>
+            <circle cx="285" cy="210" r="4" fill="#FFFFFF" stroke-width="0"></circle>
+            <circle cx="251" cy="148" r="3.5" fill="#00356B" stroke-width="1.75"></circle>
+            <circle cx="251" cy="176" r="3.5" fill="#FFFFFF" stroke-width="0"></circle>
+          </g>
+        </g>
+      </svg>
+    </a>
+    <span class="header-tag">Yale Agentic Hackathons</span>
+  </header>
+
+  <main class="layout">
+    <section class="intro">
+      <p class="eyebrow">Spring 2027 · New Haven, CT</p>
+      <h1>Build the agents.<br><em>Be there first.</em></h1>
+      <p class="lede">yah. brings Yale undergraduates together to design, build and demo AI agents that plan, use tools and take action. Our first hackathon is coming this spring. Join the list to save your spot and hear first when applications open.</p>
+      <ul class="facts">
+        <li><span>Who</span>Yale undergrads of every major and skill level</li>
+        <li><span>What</span>A hackathon centered on building AI agents</li>
+        <li><span>When</span>Spring 2027, date to be announced</li>
+      </ul>
+    </section>
+
+    <section class="signup" aria-labelledby="signup-title">
+      <div class="card">
+        <h2 id="signup-title">Join the list</h2>
+        <p class="card-sub">Save your spot and get updates on future events.</p>
+
+        <form id="signup-form" novalidate>
+          <div class="field">
+            <label for="name">Name</label>
+            <input id="name" name="name" type="text" autocomplete="name" required maxlength="120">
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" autocomplete="email" required maxlength="254" placeholder="you@yale.edu">
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="school">School <span class="opt">(optional)</span></label>
+              <input id="school" name="school" type="text" autocomplete="organization" maxlength="120" placeholder="Yale College">
+            </div>
+            <div class="field">
+              <label for="grad_year">Class year <span class="opt">(optional)</span></label>
+              <input id="grad_year" name="grad_year" type="text" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" placeholder="2029">
+            </div>
+          </div>
+          <fieldset class="field">
+            <legend>I'm interested in</legend>
+            <div class="chips">
+              <label class="chip"><input type="checkbox" name="interests" value="attending" checked><span>Attending</span></label>
+              <label class="chip"><input type="checkbox" name="interests" value="updates" checked><span>Event updates</span></label>
+              <label class="chip"><input type="checkbox" name="interests" value="volunteering"><span>Volunteering</span></label>
+              <label class="chip"><input type="checkbox" name="interests" value="sponsoring"><span>Sponsoring</span></label>
+            </div>
+          </fieldset>
+          <!-- Honeypot: hidden from people, bots tend to fill it -->
+          <div class="hp" aria-hidden="true">
+            <label for="website">Website</label>
+            <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
+          </div>
+          <button type="submit" class="btn">Sign me up</button>
+          <p id="form-status" class="status" role="status" aria-live="polite"></p>
+        </form>
+
+        <div id="signup-done" class="done" hidden>
+          <h2>You're on the list.</h2>
+          <p>We'll email you when applications open and as more events are announced.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>© 2026 Yale Agentic Hackathons · An independent undergraduate organization</p>
+    <p><a href="https://www.linkedin.com/company/yale-agentic-hackathons">LinkedIn</a></p>
+  </footer>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
