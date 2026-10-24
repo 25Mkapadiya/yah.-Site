@@ -54,6 +54,13 @@ h1 { margin: 0; }
 
 .logo.on { filter: drop-shadow(0 0 8px rgba(185, 208, 238, 0.55)); }
 
+/* Logo text and nodes at 50%; the circuit lines stay full strength. */
+.logo text,
+.logo circle {
+  fill-opacity: 0.5;
+  stroke-opacity: 0.5;
+}
+
 .tagline {
   margin: 20px 0 40px;
   font-size: 0.95rem;
