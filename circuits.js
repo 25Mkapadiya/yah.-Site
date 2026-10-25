@@ -493,12 +493,33 @@
       if (w === lastW && Math.abs(h - lastH) < 120) return;
       lastW = w; lastH = h;
       build();
+      if (logo) logoTop = logo.getBoundingClientRect().top + window.scrollY;
     }, 200);
+  }
+
+  // Safety net: if anything moves the logo after the circuits are drawn
+  // (content changing height, late font swaps), redraw so the traces still
+  // meet it. Only rebuilds when the logo actually moves.
+  var logoTop = null;
+  function watchLogo() {
+    if (!logo || !window.ResizeObserver) return;
+    logoTop = logo.getBoundingClientRect().top + window.scrollY;
+    var timer;
+    new ResizeObserver(function () {
+      clearTimeout(timer);
+      timer = setTimeout(function () {
+        var top = logo.getBoundingClientRect().top + window.scrollY;
+        if (Math.abs(top - logoTop) < 1) return;
+        logoTop = top;
+        build();
+      }, 100);
+    }).observe(document.querySelector('main'));
   }
 
   function start() {
     lastW = document.documentElement.clientWidth; lastH = window.innerHeight;
     build();
+    watchLogo();
     window.addEventListener('resize', onResize);
   }
 

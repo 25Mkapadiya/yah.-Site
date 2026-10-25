@@ -101,6 +101,18 @@ button:hover { color: var(--sky); }
 button:focus-visible { outline: 2px solid var(--sky); outline-offset: 2px; }
 button[disabled] { opacity: 0.6; cursor: progress; }
 
+.cta {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* After sign-up the box keeps its height and centers the confirmation
+   where the form was. */
+.cta.done { justify-content: center; }
+.cta.done .status { margin: 0; }
+
 .status {
   min-height: 1.4em;
   margin: 14px 0 0;

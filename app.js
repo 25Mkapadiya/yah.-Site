@@ -5,7 +5,16 @@
   var button = form.querySelector('button');
   var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+  var cta = document.getElementById('cta');
+
+  // Swap the form for the confirmation without changing the page's height.
+  // The body centers <main> vertically, so any height change would move the
+  // logo away from the background circuits drawn into it.
   function done() {
+    if (cta) {
+      cta.style.height = cta.offsetHeight + 'px';
+      cta.classList.add('done');
+    }
     form.hidden = true;
     statusEl.textContent = "You're on the list.";
   }
